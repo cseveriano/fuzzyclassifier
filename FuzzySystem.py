@@ -14,9 +14,6 @@ class FuzzySystem(object):
 
         self.createRules(X_train, y_train)
 
-        for rule in self.ruleDictionary:
-            print(rule.getCertaintyGrade())
-
     def createRules(self, X_train, y_train):
 
         for i in range(X_train.shape[0]):
@@ -26,7 +23,7 @@ class FuzzySystem(object):
             for j in range(X_train.shape[1]):
                 feat_val = X_train[i, j]
 
-                mu_val, ind_val = FuzzySet.getMaxMembership(feat_val, self.fuzzysets)
+                mu_val, ind_val = FuzzySet.getMaxMembership(feat_val, self.fuzzysets[j])
                 pattern_memberships.append(mu_val)
                 pattern_indexes.append(ind_val)
 
@@ -59,16 +56,16 @@ class FuzzySystem(object):
 
         return errorRate
 
-    def classifyWithCertaintyGrade(self, X_test, certainty_grades, consequents, i):
+    def classifyWithCertaintyGrade(self, X_test):
 
         ruleResults = {}
 
-        for rule in self.ruleDictionary:
+        for rule in self.ruleDictionary.values():
 
             att_mu = []
             for j in range(len(X_test)):
                 ai = rule.antecedent[j]
-                fs = self.fuzzysets[ai]
+                fs = self.fuzzysets[j][ai]
                 att_mu.append(fs.membership(X_test[j]))
 
             rule_membership = 1
@@ -79,7 +76,7 @@ class FuzzySystem(object):
 
         max_rule_key = max(ruleResults.keys(), key=(lambda k: ruleResults[k]))
 
-        return rule[max_rule_key].consequent
+        return self.ruleDictionary[max_rule_key].consequent
 
 
 

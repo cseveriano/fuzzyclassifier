@@ -20,7 +20,7 @@ class Rule:
 
         if self.certainty_grade == 0:
             max_beta = max(self.beta)
-            max_beta_index = self.beta.index(max_beta)
+            max_beta_index = np.argmax(self.beta)
 
             other_betas = 0
 

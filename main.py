@@ -10,27 +10,36 @@ import Partitioner as part
 # import base iris
 iris = datasets.load_iris()
 
-X = iris.data[:,:2]
+#X = iris.data[:,:2]
+X = iris.data
 y = iris.target
 
-
-#for npaticoes in range(2,6):
-#    for iteracoes in range(1,10):
-# normalizar X e y
-nparticoes = 2
+# normalizar X
 X_norm = X / X.max(axis=0)
 
+testes_particoes = np.arange(2,11)
 
-# separar base com Cross Validation
-X_train, X_test, y_train, y_test = train_test_split(X_norm, y, test_size=0.3, random_state=0)
+train_errors = []
+test_errors = []
 
-fuzzysets = []
+for nparticoes in testes_particoes:
 
-for i in range(X_train.shape[1]):
-    fuzzysets.append(part.Partitioner("FS", np.array([0,1]), nparticoes).sets)
+    # separar base com Cross Validation
+    X_train, X_test, y_train, y_test = train_test_split(X_norm, y, test_size=0.5, random_state=0)
 
-fuzzy = FuzzySystem.FuzzySystem(fuzzysets)
-fuzzy.train(X_train, y_train)
-error = fuzzy.test(X_test, y_test)
+    fuzzysets = []
+
+    for i in range(X_train.shape[1]):
+        fuzzysets.append(part.Partitioner("FS", np.array([0,1]), nparticoes).sets)
+
+    fuzzy = FuzzySystem.FuzzySystem("FuzzyWithCG", fuzzysets)
+    fuzzy.train(X_train, y_train)
+
+    train_errors.append(fuzzy.test(X_train, y_train))
+    test_errors.append(fuzzy.test(X_test, y_test))
 
 
+for part, train, test in zip(testes_particoes,train_errors,test_errors):
+    print("Particoes = ",part)
+    print("Erro treinamento = ",train)
+    print("Erro teste = ",test)
