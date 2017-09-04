@@ -39,7 +39,27 @@ for nparticoes in testes_particoes:
     test_errors.append(fuzzy.test(X_test, y_test))
 
 
-for part, train, test in zip(testes_particoes,train_errors,test_errors):
-    print("Particoes = ",part)
-    print("Erro treinamento = ",train)
-    print("Erro teste = ",test)
+#for part, train, test in zip(testes_particoes,train_errors,test_errors):
+#    print("Particoes = ",part)
+#    print("Erro treinamento = ",train)
+#    print("Erro teste = ",test)
+
+## Plot do erro de treinamento
+plt.plot(testes_particoes, train_errors)
+
+plt.xlabel('Número de funções de pertinência')
+plt.ylabel('Erro de Treinamento (%)')
+plt.title('Treinamento do modelo')
+#plt.grid(True)
+plt.savefig("train.png")
+plt.show()
+
+## Plot do erro de validação
+plt.plot(testes_particoes, test_errors)
+
+plt.xlabel('Número de funções de pertinência')
+plt.ylabel('Erro de Validação (%)')
+plt.title('Validação do modelo')
+#plt.grid(True)
+plt.savefig("test.png")
+plt.show()
