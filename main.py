@@ -35,8 +35,11 @@ for nparticoes in testes_particoes:
     fuzzy = FuzzySystem.FuzzySystem("FuzzyWithCG", fuzzysets)
     fuzzy.train(X_train, y_train)
 
-    train_errors.append(fuzzy.test(X_train, y_train))
-    test_errors.append(fuzzy.test(X_test, y_test))
+    train_consequents, train_error_rate = fuzzy.test(X_train, y_train)
+    train_errors.append(train_error_rate)
+
+    test_consequents, test_error_rate = fuzzy.test(X_test, y_test)
+    test_errors.append(test_error_rate)
 
 
 #for part, train, test in zip(testes_particoes,train_errors,test_errors):

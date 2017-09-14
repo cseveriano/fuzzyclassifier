@@ -54,7 +54,7 @@ class FuzzySystem(object):
 
         errorRate = self.getErrorRate(consequents, y_test)
 
-        return errorRate
+        return consequents, errorRate
 
     def classifyWithCertaintyGrade(self, X_test):
 
